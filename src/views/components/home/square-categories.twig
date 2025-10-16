@@ -1,0 +1,67 @@
+{#
+| Variable                           | Type     | Description                                                                  |
+|------------------------------------|----------|------------------------------------------------------------------------------|
+| component                          | object   | Contains merchant settings for fields from twilight.json `component` section |
+| component.merge_with_top_component | bool     |                                                                              |
+| component.title                    | ?string  |                                                                              |
+| component.links                    | object[] | list of links                                                                |
+| component.links[].icon             | string   |                                                                              |
+| component.links[].title            | string   |                                                                              |
+| component.links[].url              | string   |                                                                              |
+| position                           | int      | Sorting number start from zero                                               |
+#}
+<section class="s-block s-block--square-categories-{{ position }} md:container p-3 overflow-hidden">
+  <salla-slider type="carousel"
+    loop
+    autoplay
+    block-title="{{ component.section_title }}"
+    show-controls="{{ component.show_controls ? 'true' : 'false'}}"
+    id="square-categories-{{ position }}">
+      <div slot="items">
+          {% if component.show_cats %}
+            {% for cat in component.categories %}
+                <div class="swiper-slide w-[calc(100%/1.65)] sm:w-[calc(100%/2.5)] md:w-[calc(100%/3)] lg:w-[calc(100%/5)] pt-5 pb-2">
+                  <a href="{{ cat.url }}" class="relative block overflow-hidden group rounded-2xl hover:-translate-y-2 transition-all duration-300" style="filter: drop-shadow(0px 0px 0px rgba(33, 33, 33, 0));" onmouseenter="this.style.filter='drop-shadow(0px 5px 3px rgba(33, 33, 33, .5))'" onmouseleave="this.style.filter='drop-shadow(0px 0px 0px rgba(33, 33, 33, 0))'">
+                    <img src="{{ cat.image }}" alt="{{ cat.title }}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                    <h2 class="absolute bottom-1 rtl:right-1 ltr:left-1 text-sm md:text-base p-3 md:p-4 font-medium text-white underline">{{ link.title }}</h2>
+                  </a>
+              </div>
+            {% endfor %}
+          {% else %}
+            {% for link in component.links %}
+                <div class="swiper-slide w-[calc(100%/1.65)] sm:w-[calc(100%/2.5)] md:w-[calc(100%/3)] lg:w-[calc(100%/5)] pt-5 pb-2">
+                    <a href="{{ link.url }}" class="relative block overflow-hidden group rounded-2xl hover:-translate-y-2 transition-all duration-300" style="filter: drop-shadow(0px 0px 0px rgba(33, 33, 33, 0));" onmouseenter="this.style.filter='drop-shadow(0px 5px 3px rgba(33, 33, 33, .5))'" onmouseleave="this.style.filter='drop-shadow(0px 0px 0px rgba(33, 33, 33, 0))'">
+                      <img src="{{ link.image }}" alt="{{ link.title }}" class="w-full h-full object-cover">
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                      {% if link.title %}
+                        <h2 class="absolute bottom-1 rtl:right-1 ltr:left-1 text-sm md:text-base p-3 md:p-4 font-medium text-white underline">{{ link.title }}</h2>
+                      {% endif %}
+                    </a>
+                </div>
+            {% endfor %}
+          {% endif %}
+      </div>
+  </salla-slider>
+</section>
+
+<style>
+#square-categories-{{ position }} .s-slider-block__title {
+margin-bottom: 0px !important;
+}
+
+#square-categories-{{ position }} .s-slider-block__title h2 {
+font-size: 1.5rem !important;
+}
+#square-categories-{{ position }} .s-slider-block__title .s-slider-block__title-nav {
+display: flex !important;
+.s-slider-nav-arrow {
+  border:none !important;
+  span{
+    svg {
+      width: 60px !important;
+    }
+  }
+}
+}
+</style>

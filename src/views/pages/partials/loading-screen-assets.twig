@@ -1,0 +1,71 @@
+<!-- To eliminate all render blocking CSS & JS and start with the critical css-->
+<!-- To show loader to the user till the page content are  loaded-->
+<style>
+  .loader-init {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: {{ theme.settings.get('loader_bg_color') ?? '#ffffff' }};
+      transition: opacity 0.75s, visibility 0.75s;
+      z-index: 9999;
+  }
+
+  .loader-init--hidden {
+      opacity: 0;
+      visibility: hidden;
+  }
+
+  .loader-init__logo {
+    width: {{ theme.settings.get('loader_logo_width')|default(120) }}px;
+    height: auto;
+  }
+
+  .loader-init__spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #eee;
+      border-top-color: #5bd5c4;
+      border-radius: 50%;
+      animation: loading 0.75s ease infinite;
+      margin-top: 20px;
+  }
+
+  @keyframes loading {
+      from { transform: rotate(0turn); }
+      to { transform: rotate(1turn); }
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const loader = document.querySelector(".loader-init");
+    if (!loader) return;
+    
+    const loaderLogo = "{{ theme.settings.get('loader_logo') }}";
+    
+    if (loaderLogo) {
+      // If we have a logo, show only the logo
+      const logo = document.createElement('img');
+      logo.src = loaderLogo;
+      logo.alt = "{{ store.name }}";
+      logo.className = "loader-init__logo {{ theme.settings.get('is_pulse_logo') ? 'animate-pulse' : '' }}";
+      loader.appendChild(logo);
+    } else {
+      // If no logo, show the spinner
+      const spinner = document.createElement('div');
+      spinner.className = "loader-init__spinner";
+      loader.appendChild(spinner);
+    }
+
+    // Hide loader after duration
+    setTimeout(() => {
+      loader.classList.add("loader-init--hidden");
+    }, {{ theme.settings.get('loader_duration')|default(3) }} * 1000);
+  });
+</script>

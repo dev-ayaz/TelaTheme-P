@@ -1,0 +1,78 @@
+{#
+| Variable         | Type    | Description                     |
+|------------------|---------|---------------------------------|
+| cart             | object  |                                 |
+| cart.items_count | int     |                                 |
+| cart.total       | string  | Formatted total ex: "١٠٠ ر.س"   |
+#}
+<header class="store-header">
+  {# Main Nav #}
+  <div id="mainnav" class="main-nav-container bg-white">
+      <div class="inner bg-inherit">
+          <div class="container">
+              <div class="flex items-stretch justify-between relative">
+                  <div class="flex items-center">
+                      <a class="lg:hidden mburger mburger--collapse leading-none rtl:ml-4 ltr:mr-4" href="#mobile-menu" aria-label="Open-menu">
+                        <svg class="icon icon-hamburger " role="img" aria-label="hamburger" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M5 10C5 9.44772 5.44772 9 6 9H18C18.5523 9 19 9.44772 19 10V10C19 10.5523 18.5523 11 18 11H6C5.44772 11 5 10.5523 5 10V10Z" fill="var(--color-primary)"></path><path d="M5 18C5 17.4477 5.44772 17 6 17H18C18.5523 17 19 17.4477 19 18V18C19 18.5523 18.5523 19 18 19H6C5.44772 19 5 18.5523 5 18V18Z" fill="var(--color-primary)"></path>
+                        </svg>
+                      </a>
+                      <button class="header-btn lg:hidden" onclick="salla.event.dispatch('search::open')">
+                        <svg class="icon icon-search " role="img" aria-label="search" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M9.32373 9.5459L14.1829 14.405" stroke="#283455" stroke-width="1.5" stroke-linecap="square"></path><path d="M9.30018 2.80474C11.0804 4.58494 11.0599 7.54316 9.19049 9.41256C7.32109 11.282 4.36287 11.3025 2.58267 9.52225C0.802464 7.74205 0.82297 4.78383 2.69237 2.91444C4.56176 1.04504 7.51998 1.02453 9.30018 2.80474Z" stroke="#283455" stroke-width="1.5" stroke-linecap="square"></path>
+                        </svg>
+                      </button>
+                      <a class="navbar-brand !hidden lg:!flex" href="{{ store.url }}">
+                          <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ store.logo }}" alt="{{ store.name }} logo">
+                          {% if is_page('index') %}
+                            <h1 class="sr-only">{{ store.name }}</h1>
+                          {% else %}
+                            <h2 class="sr-only">{{ store.name }}</h2>
+                          {% endif %}
+                      </a>
+                    </div>
+                    <a class="navbar-brand flex lg:hidden" href="{{ store.url }}">
+                        <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ store.logo }}" alt="{{ store.name }} logo">
+                        {% if is_page('index') %}
+                          <h1 class="sr-only">{{ store.name }}</h1>
+                        {% else %}
+                          <h2 class="sr-only">{{ store.name }}</h2>
+                        {% endif %}
+                    </a>
+                    <div class="!hidden lg:!flex">
+                      <custom-main-menu></custom-main-menu>
+                    </div>
+                  <div class="flex items-center justify-end">
+                    <button class="header-btn hidden lg:flex" onclick="salla.event.dispatch('search::open')">
+                      <svg class="icon icon-search " role="img" aria-label="search" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.32373 9.5459L14.1829 14.405" stroke="#283455" stroke-width="1.5" stroke-linecap="square"></path><path d="M9.30018 2.80474C11.0804 4.58494 11.0599 7.54316 9.19049 9.41256C7.32109 11.282 4.36287 11.3025 2.58267 9.52225C0.802464 7.74205 0.82297 4.78383 2.69237 2.91444C4.56176 1.04504 7.51998 1.02453 9.30018 2.80474Z" stroke="#283455" stroke-width="1.5" stroke-linecap="square"></path>
+                      </svg>
+                    </button>
+                      {% if user.type=='user' %}
+                        <salla-user-menu avatar-only show-header></salla-user-menu>
+                      {% else %}
+                          <button class="header-btn" aria-label="user-icon" onclick="salla.event.dispatch('login::open')">
+                            <i class="header-btn__icon sicon-user-circle"></i>
+                          </button>
+                      {% endif %}
+                      <button
+                      onclick="document.querySelector('.tela-cart-aside').classList.add('show')">
+                        <salla-cart-summary class="flex pointer-events-none">
+                          <i slot="icon" class="header-btn__icon icon sicon-shopping-bag !hidden"></i>
+                          <svg class="icon icon-bag pointer-events-none" role="img" aria-label="bag" width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.69452 17.25L0.809908 5.75H13.1901L12.3055 17.25H1.69452Z" stroke="#283455" stroke-width="1.5"></path><path d="M10 8V4C10 2.34315 8.65685 1 7 1V1C5.34315 1 4 2.34315 4 4V8" stroke="#283455" stroke-width="1.5"></path>
+                          </svg>
+                        </salla-cart-summary>
+                    </button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div id="teela-mobile-nav" class="bg-white {{ is_page('index') ? 'lg:hidden' : 'hidden' }}  border-t border-gray-300 overflow-hidden">
+    <custom-main-menu is-mobile></custom-main-menu>
+  </div>
+</header>
+{% if store.scope %}
+    <salla-scopes selection="{{ store.scope.display_as == 'popup' ? 'mandatory' : 'optional' }}"></salla-scopes>
+{% endif %}

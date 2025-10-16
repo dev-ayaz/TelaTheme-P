@@ -1,0 +1,48 @@
+<section class="s-block s-block--visit-branch"
+style="background-color: {{ component.bg_color|default('#DDE3EC') }};"
+>
+  <div class="visit-branch-wrapper container py-6 md:py-8 px-10 md:px-16">
+    
+    {# Desktop Layout: Title | Desc | Button (all justified between) #}
+    <div class="hidden md:flex items-center justify-between gap-6">
+      {% if component.title %}
+        <h2 class="text-2xl lg:text-3xl font-bold text-primary shrink-0">{{ component.title }}</h2>
+      {% endif %}
+      
+      {% if component.desc %}
+        <p class="text-base lg:text-lg text-primary font-light flex-1">{{ component.desc }}</p>
+      {% endif %}
+      
+      {% if component.cta and component.url %}
+        <salla-button href="{{ component.url }}" 
+          size="medium"
+          fill="outline">
+          {{ component.cta }}
+        </salla-button>
+      {% endif %}
+    </div>
+    
+    {# Mobile Layout: Title on top, then Desc | Button below #}
+    <div class="md:hidden flex flex-col">
+      {% if component.title %}
+        <h2 class="text-xl font-bold text-primary">{{ component.title }}</h2>
+      {% endif %}
+      
+      <div class="flex items-center justify-between gap-4">
+        {% if component.desc %}
+          <p class="text-sm text-gray-600 flex-1">{{ component.desc }}</p>
+        {% endif %}
+        
+        {% if component.cta and component.url %}
+          <salla-button href="{{ component.url }}" 
+            size="medium"
+            fill="outline">
+            {{ component.cta }}
+          </salla-button>
+        {% endif %}
+      </div>
+    </div>
+    
+  </div>
+</section>
+

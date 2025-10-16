@@ -1,0 +1,85 @@
+{#
+| Variable                      | Type     | Description                                                                  |
+|------------------------------|----------|------------------------------------------------------------------------------|
+| component                    | object   | Contains merchant settings for fields from twilight.json `component` section |
+| component.slides[].image     | string   | Image url                                                                    |
+| component.slides[].upper_title| ?string | Upper title text                                                             |
+| component.slides[].main_title| ?string | Main title text                                                              |
+| component.slides[].desc      | ?string | Description text                                                             |
+| component.slides[].cta       | ?string | Call to action button text                                                   |
+| component.slides            | object[] | list of slides                                                               |
+| position                    | int      | Sorting number start from zero                                               |
+#}
+<section class="s-block s-block--main-slider s-block--full-bg wide-placeholder"> 
+    
+    <salla-slider 
+      id="main-slider-{{ position }}"
+      auto-play
+      show-controls="false"
+      slider-config='{
+        "lazy": "false"
+      }'
+      type="fullwidth">
+        <div slot="items">
+            {% for slide in component.slides %}
+           
+                <div class="swiper-slide w-full bg-dark relative overflow-hidden">
+                    {% if slide.video or slide.video_mobile %}
+                        <div class="video-wrapper">
+                            {% if slide.video_mobile %}
+                                <video autoplay muted loop playsinline class="lg:hidden">
+                                    <source src="{{ slide.video_mobile }}" type="video/mp4">
+                                </video>
+                            {% endif %}
+                            {% if slide.video %}
+                                <video autoplay muted loop playsinline class="{% if slide.video_mobile %}hidden lg:block{% endif %}">
+                                    <source src="{{ slide.video }}" type="video/mp4">
+                                </video>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        {% if slide.mobile_image %}
+                            <div style="background-image: url({{ slide.mobile_image }});" class="overlay-bg bg-cover bg-center absolute lg:hidden inset-0"></div>
+                            <div style="background-image: url({{ slide.image }});" class="overlay-bg bg-cover bg-center absolute hidden lg:block inset-0"></div>
+                        {% else %}
+                            <div style="background-image: url({{ slide.image }});" class="overlay-bg bg-cover bg-center absolute inset-0"></div>
+                        {% endif %}
+                    {% endif %}
+                    <div class="container z-10 absolute inset-0 flex {% if 'top' in slide.vertical_items_align %}items-start{% elseif 'bottom' in slide.vertical_items_align %}items-end{% else %}items-center{% endif %} {% if 'left' in slide.horizontal_items_align %}ltr:justify-start rtl:justify-end{% elseif 'right' in slide.horizontal_items_align %}ltr:justify-end rtl:justify-start{% else %}justify-center{% endif %} py-8 md:py-12">
+                        <div class="w-11/12 md:w-7/12 lg:w-5/12 text-white {% if 'left' in slide.text_align %}text-left{% elseif 'right' in slide.text_align %}text-right{% else %}text-center{% endif %}">
+                            {% if slide.main_title %}
+                                <h2
+                                    data-swiper-parallax="-500"
+                                    class="text-3xl lg:text-4xl font-bold leading-tight mb-4 {% if theme.settings.get('merge_with_main_slider') and not slide.upper_title %}mt-16{% else %}{% endif %}"
+                                    style="color: {{ slide.main_title_color|default('#ffffff') }}">
+                                    {{ slide.main_title }}
+                                </h2>
+                            {% endif %}
+                            
+                            {% if slide.desc %}
+                                <p
+                                    data-swiper-parallax="-300"
+                                    class="line-clamp-2 description mb-8 text-sm lg:text-base"
+                                    style="color: {{ slide.desc_color|default('#ffffff') }}">
+                                    {{ slide.desc }}
+                                </p>
+                            {% endif %}
+
+                            {% if slide.cta %}
+                                <salla-button 
+                                    href="{{ slide.url }}"
+                                    data-swiper-parallax="-100"
+                                    size="medium"
+                                    fill="solid"
+                                    class="!py-4 !px-12"
+                                >
+                                    {{ slide.cta }}                                        
+                                </salla-button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </salla-slider>
+</section>

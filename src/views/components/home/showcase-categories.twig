@@ -1,0 +1,62 @@
+{% macro hotspot(product_id, x_position, y_position) %}
+  {% if product_id %}
+    <div class="hotspot-wrapper" style="top: clamp(0%, {{ y_position|default(0) }}%, 100%); left: clamp(0%, {{ x_position|default(0) }}%, 100%);">
+      <button class="product-hotspot">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="hotspot-icon">
+          <circle cx="12" cy="12" r="11" fill="none" stroke="white" stroke-width="2"/>
+          <path class="hotspot-icon-vertical" d="M12 6V18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <path class="hotspot-icon-horizontal" d="M6 12H18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="hotspot-card">
+        <showcase-product product-id="{{ product_id }}"></showcase-product>
+      </div>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+<section class="s-block s-block--showcase-categories container overflow-hidden">
+  <salla-slider type="carousel" autoplay block-title="{{ component.section_title }}" show-controls="true" id="showcase-categories">
+    <div slot="items">
+      {% for slide in component.slides %}
+        <div class="swiper-slide w-[calc(100%/1.75)] lg:w-[calc(100%/3)] xl:w-[calc(100%/4.1)] !px-4">
+          <div class="showcase-slide h-full flex flex-col">
+            
+            {# Image with product hotspots #}
+            <div class="showcase-image relative rounded-none mb-5">
+              <img src="{{ slide.image }}" alt="{{ slide.title }}" class="w-full h-full object-cover aspect-[4.25/4.75] hover:scale-[1.02] transition-all duration-300 rounded-none">
+              
+              {# Product hotspots #}
+              {{ _self.hotspot(slide.first_product[0], slide.first_product_x_position, slide.first_product_y_position) }}
+              {{ _self.hotspot(slide.second_product[0], slide.second_product_x_position, slide.second_product_y_position) }}
+              {{ _self.hotspot(slide.third_product[0], slide.third_product_x_position, slide.third_product_y_position) }}
+              {{ _self.hotspot(slide.fourth_product[0], slide.fourth_product_x_position, slide.fourth_product_y_position) }}
+            </div>
+            
+            {# Content #}
+            <div class="showcase-content flex flex-col flex-1 text-center">
+              <h3 class="text-lg md:text-xl font-bold text-primary mb-2">{{ slide.title }}</h3>
+              
+              {% if slide.desc %}
+                <p class="text-sm md:text-base mb-4 font-light flex-1 text-primary">
+                  {{ slide.desc }}
+                </p>
+              {% endif %}
+              
+              {% if slide.cta %}
+                <salla-button href="{{ slide.url }}"
+                    size="medium"
+                    fill="outline"
+                    >
+                  {{ slide.cta }}
+                </salla-button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </salla-slider>
+</section>
+
+<script src="{{ 'showcase-product.js'| asset }}"></script>
