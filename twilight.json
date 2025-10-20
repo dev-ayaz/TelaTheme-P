@@ -3,7 +3,7 @@
         "ar": "تيلا",
         "en": "tela"
     },
-    "repository": "https://github.com/CW-SA/tela",
+    "repository": "https://github.com/dev-ayaz/TelaTheme-P",
     "author_email": "khalouf+tela@creativeworks.sa",
     "features": [
         "mega-menu",
@@ -2985,7 +2985,7 @@
             ]
         }
     ],
-    "support_url": null,
+    "support_url": "",
     "description": {
         "ar": "",
         "en": ""
